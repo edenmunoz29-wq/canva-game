@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>4 Pics 1 Word — Canva Edition</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --purple: #7C3AED;
+    --purple-light: #EDE9FE;
+    --purple-mid: #A78BFA;
+    --green: #059669;
+    --green-light: #D1FAE5;
+    --red: #DC2626;
+    --red-light: #FEE2E2;
+    --gold: #F59E0B;
+    --bg: #F5F3FF;
+    --card: #FFFFFF;
+    --text: #1E1B4B;
+    --muted: #6B7280;
+    --border: #E5E7EB;
+    --radius: 14px;
+    --radius-sm: 8px;
+  }
+
+  body {
+    font-family: 'Nunito Sans', sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 24px 16px 40px;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  header h1 {
+    font-family: 'Nunito', sans-serif;
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--purple);
+    letter-spacing: -0.5px;
+  }
+
+  header p {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 500px;
+  }
+
+  /* Set tabs */
+  .set-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .tab {
+    flex: 1;
+    padding: 10px;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--border);
+    font-family: 'Nunito', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--muted);
+    background: var(--card);
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+  }
+
+  .tab.active {
+    border-color: var(--purple);
+    background: var(--purple-light);
+    color: var(--purple);
+  }
+
+  .tab.done {
+    border-color: var(--green);
+    background: var(--green-light);
+    color: var(--green);
+  }
+
+  /* Progress pips */
+  .pip-row {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+
+  .pip {
+    flex: 1;
+    height: 5px;
+    border-radius: 3px;
+    background: var(--border);
+    transition: background 0.3s;
+  }
+
+  .pip.done { background: var(--green); }
+  .pip.active { background: var(--purple); }
+
+  /* Top bar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .round-label {
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 600;
+  }
+
+  .score-label {
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 600;
+  }
+
+  .score-label span {
+    color: var(--purple);
+    font-weight: 800;
+  }
+
+  /* 4 picture grid */
+  .pics {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .pic {
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: border-color 0.2s;
+  }
+
+  .pic svg {
+    width: 52px;
+    height: 52px;
+    stroke: var(--purple-mid);
+    fill: none;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .pic span {
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 600;
+    text-align: center;
+    padding: 0 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  /* Hint */
+  .hint {
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 14px;
+    font-style: italic;
+  }
+
+  /* Answer boxes */
+  .answer-row {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+
+  .box {
+    width: 46px;
+    height: 52px;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Nunito', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    cursor: pointer;
+    background: var(--card);
+    color: var(--text);
+    transition: all 0.15s;
+  }
+
+  .box.filled { border-color: var(--purple); background: var(--purple-light); color: var(--purple); }
+  .box.correct { border-color: var(--green); background: var(--green-light); color: var(--green); }
+  .box.wrong { border-color: var(--red); background: var(--red-light); color: var(--red); }
+
+  /* Letter tiles */
+  .tiles {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+
+  .tile {
+    width: 46px;
+    height: 52px;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--border);
+    background: var(--card);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Nunito', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+  }
+
+  .tile:hover { background: var(--purple-light); border-color: var(--purple); color: var(--purple); }
+  .tile.used { opacity: 0.2; pointer-events: none; }
+
+  /* Buttons */
+  .btns {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+
+  button {
+    padding: 10px 20px;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--border);
+    background: var(--card);
+    font-family: 'Nunito', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  button:hover { border-color: var(--purple); color: var(--purple); background: var(--purple-light); }
+
+  /* Message */
+  .msg {
+    text-align: center;
+    font-size: 15px;
+    font-weight: 700;
+    min-height: 22px;
+    font-family: 'Nunito', sans-serif;
+  }
+
+  .msg.ok { color: var(--green); }
+  .msg.no { color: var(--red); }
+  .msg.info { color: var(--muted); }
+
+  /* End screen */
+  .end {
+    text-align: center;
+    padding: 2rem 1rem;
+  }
+
+  .trophy {
+    font-size: 56px;
+    margin-bottom: 8px;
+  }
+
+  .final-score {
+    font-family: 'Nunito', sans-serif;
+    font-size: 52px;
+    font-weight: 800;
+    color: var(--purple);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .final-sub {
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+
+  .set-scores {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 24px;
+  }
+
+  .set-score-card {
+    background: var(--card);
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 28px;
+    text-align: center;
+  }
+
+  .set-score-card .slabel {
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+  }
+
+  .set-score-card .sval {
+    font-family: 'Nunito', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--purple);
+  }
+
+  .btn-restart {
+    background: var(--purple);
+    color: #fff;
+    border-color: var(--purple);
+    padding: 12px 32px;
+    font-size: 15px;
+  }
+
+  .btn-restart:hover { background: #6D28D9; border-color: #6D28D9; color: #fff; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>4 Pics 1 Word</h1>
+  <p>Canva Edition — 2 Sets, 5 Rounds Each</p>
+</header>
+
+<div class="container" id="app"></div>
+
+<script>
+const SETS = [
+  {
+    name: "Set 1",
+    rounds: [
+      {
+        word: "FONT",
+        hint: "4 letters — text style in Canva",
+        pics: [
+          { label: "alphabet style", svg: `<svg viewBox="0 0 24 24"><path d="M4 20V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14"/><path d="M8 20h8"/><path d="M12 4v16"/></svg>` },
+          { label: "typeface", svg: `<svg viewBox="0 0 24 24"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>` },
+          { label: "text size", svg: `<svg viewBox="0 0 24 24"><path d="M3 7V5h8v2"/><path d="M7 5v14"/><path d="M13 13v-2h6v2"/><path d="M16 11v10"/></svg>` },
+          { label: "writing style", svg: `<svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>` }
+        ]
+      },
+      {
+        word: "LOGO",
+        hint: "4 letters — every brand has one",
+        pics: [
+          { label: "brand mark", svg: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>` },
+          { label: "company symbol", svg: `<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6v6H9z"/></svg>` },
+          { label: "recognition", svg: `<svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>` },
+          { label: "identity badge", svg: `<svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>` }
+        ]
+      },
+      {
+        word: "GRID",
+        hint: "4 letters — layout alignment tool",
+        pics: [
+          { label: "rows & columns", svg: `<svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>` },
+          { label: "structure", svg: `<svg viewBox="0 0 24 24"><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg>` },
+          { label: "guide lines", svg: `<svg viewBox="0 0 24 24"><path d="M3 3h7v7H3z"/><path d="M14 3h7v7h-7z"/><path d="M3 14h7v7H3z"/><path d="M14 14h7v7h-7z"/></svg>` },
+          { label: "layout tool", svg: `<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/><path d="M9 3v18"/><path d="M15 3v18"/></svg>` }
+        ]
+      },
+      {
+        word: "FRAME",
+        hint: "5 letters — image container in Canva",
+        pics: [
+          { label: "image holder", svg: `<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>` },
+          { label: "border & crop", svg: `<svg viewBox="0 0 24 24"><polyline points="6.13 1 6 16a2 2 0 0 0 2 2h15"/><polyline points="1 6.13 16 6a2 2 0 0 1 2 2v15"/></svg>` },
+          { label: "canvas boundary", svg: `<svg viewBox="0 0 24 24"><path d="M21 3H3v18h18V3z"/><path d="M3 9h18"/><path d="M3 15h18"/><path d="M9 3v18"/><path d="M15 3v18"/></svg>` },
+          { label: "design area", svg: `<svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2"/><rect x="7" y="7" width="10" height="10" rx="1"/></svg>` }
+        ]
+      },
+      {
+        word: "BRAND",
+        hint: "5 letters — your visual identity",
+        pics: [
+          { label: "identity", svg: `<svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>` },
+          { label: "company look", svg: `<svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>` },
+          { label: "consistent colors", svg: `<svg viewBox="0 0 24 24"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="10.5" r="2.5"/><circle cx="8.5" cy="7.5" r="2.5"/><circle cx="6.5" cy="12.5" r="2.5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>` },
+          { label: "recognition", svg: `<svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>` }
+        ]
+      }
+    ]
+  },
+  {
+    name: "Set 2",
+    rounds: [
+      {
+        word: "COLOR",
+        hint: "5 letters — Canva's palette tool",
+        pics: [
+          { label: "hues & shades", svg: `<svg viewBox="0 0 24 24"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="10.5" r="2.5"/><circle cx="8.5" cy="7.5" r="2.5"/><circle cx="6.5" cy="12.5" r="2.5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>` },
+          { label: "swatches", svg: `<svg viewBox="0 0 24 24"><path d="M11 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="11 2 11 9 18 9"/></svg>` },
+          { label: "fill tool", svg: `<svg viewBox="0 0 24 24"><path d="M19 11H5m14 0a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2m14 0V9a2 2 0 0 0-2-2M5 11V9a2 2 0 0 1 2-2m0 0V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2M7 7h10"/></svg>` },
+          { label: "spectrum", svg: `<svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9"/><path d="M12 3v9"/><path d="M21 12h-9"/></svg>` }
+        ]
+      },
+      {
+        word: "LAYER",
+        hint: "5 letters — stack elements in Canva",
+        pics: [
+          { label: "stacked items", svg: `<svg viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>` },
+          { label: "overlapping", svg: `<svg viewBox="0 0 24 24"><rect x="2" y="7" width="16" height="16" rx="2"/><path d="M22 3H8a2 2 0 0 0-2 2v12"/></svg>` },
+          { label: "arrange order", svg: `<svg viewBox="0 0 24 24"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>` },
+          { label: "sheets on top", svg: `<svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>` }
+        ]
+      },
+      {
+        word: "SLIDE",
+        hint: "5 letters — one page in a deck",
+        pics: [
+          { label: "deck page", svg: `<svg viewBox="0 0 24 24"><path d="M2 3h20v14H2z"/><path d="M8 21h8"/><path d="M12 17v4"/></svg>` },
+          { label: "next page", svg: `<svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>` },
+          { label: "presentation", svg: `<svg viewBox="0 0 24 24"><path d="M12 16v5"/><path d="M8 21h8"/><rect x="2" y="3" width="20" height="13" rx="2"/></svg>` },
+          { label: "screen display", svg: `<svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M8 20h8"/><path d="M12 16v4"/></svg>` }
+        ]
+      },
+      {
+        word: "ALIGN",
+        hint: "5 letters — arranging elements neatly",
+        pics: [
+          { label: "center it", svg: `<svg viewBox="0 0 24 24"><line x1="18" y1="10" x2="6" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="18" y1="18" x2="6" y2="18"/></svg>` },
+          { label: "straight lines", svg: `<svg viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><polyline points="8 8 3 12 8 16"/><polyline points="16 8 21 12 16 16"/></svg>` },
+          { label: "distribute", svg: `<svg viewBox="0 0 24 24"><line x1="21" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="21" y1="18" x2="3" y2="18"/></svg>` },
+          { label: "position tool", svg: `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><line x1="12" y1="3" x2="12" y2="9"/><line x1="12" y1="15" x2="12" y2="21"/><line x1="3" y1="12" x2="9" y2="12"/><line x1="15" y1="12" x2="21" y2="12"/></svg>` }
+        ]
+      },
+      {
+        word: "SHARE",
+        hint: "5 letters — send your Canva design",
+        pics: [
+          { label: "send it out", svg: `<svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>` },
+          { label: "copy link", svg: `<svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>` },
+          { label: "collaborate", svg: `<svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>` },
+          { label: "publish", svg: `<svg viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>` }
+        ]
+      }
+    ]
+  }
+];
+
+let activeSet = 0, cur = 0, guessed = [], tiles = [], msg = "", msgType = "";
+let setScores = [0, 0], setDone = [false, false], allDone = false;
+
+function shuffle(a) { return [...a].sort(() => Math.random() - 0.5); }
+
+function setupRound() {
+  const word = SETS[activeSet].rounds[cur].word;
+  const pool = shuffle(word.split(""));
+  guessed = Array(word.length).fill(null);
+  tiles = pool.map(l => ({ l, used: false }));
+  msg = ""; msgType = "";
+}
+
+function switchSet(i) {
+  if (setDone[i] && !allDone) return;
+  if (setDone[i]) return;
+  activeSet = i;
+  cur = 0;
+  setupRound();
+  draw();
+}
+
+function draw() {
+  const app = document.getElementById("app");
+
+  if (allDone) {
+    const total = setScores[0] + setScores[1];
+    const max = 10;
+    const emoji = total === max ? "🏆" : total >= 7 ? "🎉" : "👏";
+    app.innerHTML = `<div class="end">
+      <div class="trophy">${emoji}</div>
+      <div class="final-score">${total}/${max}</div>
+      <div class="final-sub">${total === max ? "Perfect score! You really know Canva!" : total >= 7 ? "Great job! Nice Canva knowledge!" : "Good effort! Keep exploring Canva!"}</div>
+      <div class="set-scores">
+        <div class="set-score-card"><div class="slabel">Set 1</div><div class="sval">${setScores[0]}/5</div></div>
+        <div class="set-score-card"><div class="slabel">Set 2</div><div class="sval">${setScores[1]}/5</div></div>
+      </div>
+      <button class="btn-restart" onclick="restart()">Play Again</button>
+    </div>`;
+    return;
+  }
+
+  const rounds = SETS[activeSet].rounds;
+  const r = rounds[cur];
+
+  const tabs = SETS.map((s, i) => {
+    let cls = "tab";
+    if (i === activeSet) cls += " active";
+    else if (setDone[i]) cls += " done";
+    return `<div class="${cls}" onclick="switchSet(${i})">${s.name} ${setDone[i] ? "✓ " + setScores[i] + "/5" : "— " + setScores[i] + "/5"}</div>`;
+  }).join("");
+
+  const pips = rounds.map((_, i) => {
+    let cls = "pip";
+    if (i < cur) cls += " done";
+    else if (i === cur) cls += " active";
+    return `<div class="${cls}"></div>`;
+  }).join("");
+
+  app.innerHTML = `
+    <div class="set-tabs">${tabs}</div>
+    <div class="topbar">
+      <div class="round-label">Round ${cur + 1} of ${rounds.length}</div>
+      <div class="score-label">Score: <span>${setScores[activeSet]}</span></div>
+    </div>
+    <div class="pip-row">${pips}</div>
+    <div class="pics">
+      ${r.pics.map(p => `<div class="pic">${p.svg}<span>${p.label}</span></div>`).join("")}
+    </div>
+    <div class="hint">Hint: ${r.hint}</div>
+    <div class="answer-row">
+      ${guessed.map((g, i) => `<div class="box${g ? (" " + (msgType === "ok" ? "correct" : msgType === "no" ? "wrong" : "filled")) : ""}" onclick="rem(${i})">${g || ""}</div>`).join("")}
+    </div>
+    <div class="tiles">
+      ${tiles.map((t, i) => `<div class="tile${t.used ? " used" : ""}" onclick="pick(${i})">${t.l}</div>`).join("")}
+    </div>
+    <div class="btns">
+      <button onclick="clr()">Clear</button>
+      <button onclick="reveal()">Reveal</button>
+    </div>
+    <div class="msg ${msgType === "ok" ? "ok" : msgType === "no" ? "no" : "info"}">${msg}</div>`;
+}
+
+function pick(i) {
+  if (tiles[i].used) return;
+  const slot = guessed.indexOf(null);
+  if (slot === -1) return;
+  guessed[slot] = tiles[i].l;
+  tiles[i].used = true;
+  msg = ""; msgType = "";
+  draw();
+  if (!guessed.includes(null)) setTimeout(check, 150);
+}
+
+function rem(i) {
+  if (!guessed[i]) return;
+  const l = guessed[i];
+  guessed[i] = null;
+  const ti = tiles.findIndex(t => t.l === l && t.used);
+  if (ti !== -1) tiles[ti].used = false;
+  msg = ""; msgType = ""; draw();
+}
+
+function check() {
+  if (guessed.join("") === SETS[activeSet].rounds[cur].word) {
+    setScores[activeSet]++;
+    msg = "Correct!"; msgType = "ok"; draw();
+    setTimeout(next, 1200);
+  } else {
+    msg = "Try again!"; msgType = "no"; draw();
+    setTimeout(() => { msg = ""; msgType = ""; draw(); }, 800);
+  }
+}
+
+function clr() {
+  guessed.forEach(g => { if (g) { const ti = tiles.findIndex(t => t.l === g && t.used); if (ti !== -1) tiles[ti].used = false; } });
+  guessed = Array(SETS[activeSet].rounds[cur].word.length).fill(null);
+  msg = ""; msgType = ""; draw();
+}
+
+function reveal() {
+  msg = "Answer: " + SETS[activeSet].rounds[cur].word;
+  msgType = "info"; draw();
+  setTimeout(next, 1800);
+}
+
+function next() {
+  const rounds = SETS[activeSet].rounds;
+  if (cur >= rounds.length - 1) {
+    setDone[activeSet] = true;
+    if (setDone[0] && setDone[1]) { allDone = true; draw(); return; }
+    const other = activeSet === 0 ? 1 : 0;
+    if (!setDone[other]) { activeSet = other; cur = 0; setupRound(); }
+  } else {
+    cur++;
+    setupRound();
+  }
+  draw();
+}
+
+function restart() {
+  activeSet = 0; cur = 0;
+  setScores = [0, 0]; setDone = [false, false]; allDone = false;
+  setupRound(); draw();
+}
+
+setupRound(); draw();
+</script>
+</body>
+</html>
